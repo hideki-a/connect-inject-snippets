@@ -1,4 +1,4 @@
-connect-inject-snipets
+connect-inject-snippets
 ==================
 connect middleware for adding the livereload script and html-inspector script to the response.
 no browser plugin is needed.
