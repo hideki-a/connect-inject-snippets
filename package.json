@@ -1,0 +1,22 @@
+{
+  "name": "connect-inject-snippets",
+  "description": "connect middleware for adding the livereload script and html-inspector script to the response",
+  "version": "0.1.0",
+  "author": {
+    "name": "Hideki Abe",
+    "email": "hideki.abe.0630@gmail.com"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "keywords": [
+    "connect",
+    "livereload",
+    "live-reload",
+    "HTML Inspector",
+    "html-inspector"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hideki-a/connect-inject-snippets"
+  }
+}
