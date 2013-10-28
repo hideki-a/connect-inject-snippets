@@ -18,7 +18,7 @@ module.exports = function injectSnippets(opt) {
   var snippet = "\n<script type=\"text/javascript\">document.write('<script src=\"" + src + "\" type=\"text/javascript\"><\\/script>";
   
   if (opt.htmlInspector) {
-    snippet += "<script src=\"http://cdnjs.cloudflare.com/ajax/libs/html-inspector/0.5.1/html-inspector.js\" type=\"text/javascript\"><\\/script><script>HTMLInspector.inspect(" + JSON.stringify(opt.inspctorConfig) + ");<\\/script>";
+    snippet += "<script src=\"http://cdnjs.cloudflare.com/ajax/libs/html-inspector/0.5.1/html-inspector.js\" type=\"text/javascript\"><\\/script><script>HTMLInspector.inspect(" + convertToText(opt.inspectorConfig) + ");<\\/script>";
   }
   snippet += "')</script>\n";
 
@@ -85,6 +85,44 @@ module.exports = function injectSnippets(opt) {
     });
     return ignored;
   }
+
+  // http://stackoverflow.com/questions/5612787/converting-an-object-to-a-string#answer-18368918
+  function convertToText(obj) {
+    //create an array that will later be joined into a string.
+    var string = [];
+
+    //is object
+    //    Both arrays and objects seem to return "object"
+    //    when typeof(obj) is applied to them. So instead
+    //    I am checking to see if they have the property
+    //    join, which normal objects don't have but
+    //    arrays do.
+    if (typeof(obj) == "object" && (obj.join == undefined)) {
+      string.push("{");
+      for (prop in obj) {
+          string.push(prop, ": ", convertToText(obj[prop]), ",");
+      };
+      string.push("}");
+
+    //is array
+    } else if (typeof(obj) == "object" && !(obj.join == undefined)) {
+      string.push("[")
+      for(prop in obj) {
+          string.push(convertToText(obj[prop]), ",");
+      }
+      string.push("]");
+
+    //is function
+    } else if (typeof(obj) == "function") {
+      string.push(obj.toString());
+
+    //all other values can be done with JSON.stringify
+    } else {
+      string.push(JSON.stringify(obj));
+    }
+
+    return string.join("").replace(/,(}|])/, "$1");
+}
 
   // middleware
   return function injectSnippets(req, res, next) {
